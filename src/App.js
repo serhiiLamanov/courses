@@ -1,24 +1,34 @@
-import logo from './logo.svg';
-import './App.css';
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Main from "./layouts/Main";
+import fetchPreview from "./loaders/fetchPreview";
+import Course from "./pages/Course";
+import Error from "./pages/Error";
+import PreviewCourses from "./pages/PreviewCourses";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    Component: Main,
+    ErrorBoundary: Error,
+    children:[
+      {
+        path:"preview-courses",
+        index: true,
+        Component: PreviewCourses,
+        loader: fetchPreview
+      },
+      {
+        path:"course/:id",
+        Component: Course,
+        loader: fetchPreview
+      },
+    ]
+  }
+])
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <RouterProvider router={router}/>
   );
 }
 
